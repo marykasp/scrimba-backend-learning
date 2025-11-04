@@ -58,3 +58,44 @@ const server = http.createServer((req, res) => {
 
 server.listen(8000, () => console.log('Server running on port 8000'))
 ```
+
+Example. Use Utility functions to serve up `index.html` file - practice `fs` and `path` module methods
+
+```javascript
+// sendResponse function
+
+export function sendResponse(res, status, contentType, payload) {
+	res.setHeader('Content-Type', contentType)
+	res.statusCode = 200
+	res.end(payload)
+}
+
+// serveStatic function
+import fs from 'nodefs'
+import path from 'node:path'
+import {sendResponse} from './sendResponse.js'
+
+export async function serveStatic(res, baseDir) {
+	// retrieve absolute path to file
+	const filePath = path.join(baseDir, 'public', 'index.html')
+
+	try {
+		const content = await fs.readFile(filePath)
+		sendResponse(res, 200, 'text/html', content)
+	} catch(err) {
+		console.log(err)
+	}
+
+}
+
+// server.js
+import http from 'node:http'
+import {serveStatic) from './utils/serveStatic.js'
+
+const __dirname = import.meta.dirname
+
+const server = http.createServer(async (req, res) => {
+
+	await serveStatic(res, __dirname)
+})
+```
