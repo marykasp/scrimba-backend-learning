@@ -55,3 +55,52 @@ export async function handleGet(res) {
   sendResponse(res, 200, "application/JSON", payload);
 }
 ```
+
+## Adding POST Request
+
+Get data from frontend form and sent to the backend API
+
+- Collect incoming data
+- parse data to JS
+- sanitize it: guard against malicious code
+- get our existing data
+- add the new data to the existing data without mutating it
+- write the compelete data to the JSON file
+
+`handlePost` function will use the following utility functions:
+
+- `parseJSONBody()` - collect and parse the incoming JSON from the form
+- `santizeData()`
+- `addNewData()` - add the new data to the dataset, will also use `getData` to retrieve all the data on API to add new data to
+- `sendResponse` - sends the response to the client
+
+Get the body of the client request - client sends the request as chunks to the server so need to iterate over those chunks and add each to the body
+
+- Node will just give access to the chunks of the stream from the request body when iterating over - ignoring the url, method, and other properties
+
+```js
+if (req.url === "/api" && req.method === "POST") {
+  let body = ``;
+
+  // how can we loop over req? and just iterate over the body?
+  // if loop over req Node will just give access to chunks in the stream
+  for await (const chunk of req) {
+    body += chunk;
+  }
+
+  try {
+    // parse data
+    const emailObject = JSON.parse(body);
+
+    res.setHeader("Content-Type", "application/JSON");
+    res.statusCode = 200;
+
+    // JS object coming in from front end needs to be converted to a string for backend
+    res.end(JSON.stringify(emailObject));
+  } catch (err) {
+    console.log("Invalid JSON", err);
+  }
+
+  return;
+}
+```
