@@ -104,3 +104,34 @@ if (req.url === "/api" && req.method === "POST") {
   return;
 }
 ```
+
+1. Collect and parse the incoming JSON from the client (sent in chunks)
+
+```js
+export async function parseJSONData(req) {
+  let body = "";
+
+  for await (const chunk of req) {
+    body += chunk;
+  }
+
+  // try to return parsed data
+  try {
+    const data = JSON.parse(body);
+    return body;
+  } catch (err) {
+    throw new Error(`JSON data is invalid: ${err}`);
+  }
+}
+
+// handle post request will then call parseJSON data
+
+export async function handlePost(req, res) {
+  try {
+    const parsedData = await parseJSONData(req);
+    await addNewData(parsedData);
+  } catch (err) {
+    console.log(err);
+  }
+}
+```
