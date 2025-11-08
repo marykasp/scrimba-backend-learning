@@ -123,15 +123,52 @@ export async function parseJSONData(req) {
     throw new Error(`JSON data is invalid: ${err}`);
   }
 }
+```
 
+2. `handlePost` will then add the parsed data to the JSON data
+
+- 201 status code: content was retrieved successfully
+
+```js
 // handle post request will then call parseJSON data
 
 export async function handlePost(req, res) {
   try {
-    const parsedData = await parseJSONData(req);
-    await addNewData(parsedData);
+    // parsed new data from request body
+    const parsedBody = await parseJSONData(req);
+    // add data to JSON
+    await addNewData(parsedBody);
+    // send response back to client to confirm success along with the parsed data
+    sendResponse(res, 201, "application/json", JSON.stringify(parsedBody));
   } catch (err) {
-    console.log(err);
+    sendResponse(res, 400, "application/json", JSON.stringify({ error: err }));
+  }
+}
+```
+
+3. Push the new data coming from the client to the JSON data on the backend (all part of handling the post request)
+
+- Get the existing data (already created utility function) - returns parsed data
+- push the new data to the existing
+- write data to the file
+- throw an error if any of the above fails
+
+```js
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import {getData} from './getData.js
+
+export async function addNewSighting(newSighting) {
+  try {
+    const existingData = await getData()
+    existingData.push(newSighting)
+
+    const filePath = path.join('data', 'data.json')
+
+    await fs.writeFile(fielPath, JSON.stringify(existingData), 'utf8')
+
+  }catch(err) {
+    throw new Error(`error: ${err})
   }
 }
 ```
