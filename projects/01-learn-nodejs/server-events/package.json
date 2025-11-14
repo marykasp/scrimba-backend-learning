@@ -1,0 +1,13 @@
+{
+  "name": "server-events",
+  "version": "1.0.0",
+  "description": "Testing out server side events",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Mary Kasparian",
+  "license": "ISC"
+}
