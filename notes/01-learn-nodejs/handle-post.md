@@ -172,3 +172,17 @@ export async function addNewSighting(newSighting) {
   }
 }
 ```
+
+## XSS Attacks
+
+**XSS** - cross-site scripting attack is a security vulnerability that allows an attacker to inject malicious scripts into web pages
+
+**Sanitization** - removing anything suspicious from incoming input. In this case, will be removing any tags from user-uploaded text
+
+## EventEmitter
+
+Event driven - code is designed to react to events as they occur
+
+- a signal that something has happened
+
+Event emitter - allows us to emit a named event to be picked up by listener functions
