@@ -158,6 +158,7 @@ import fs from 'node:fs/promises'
 import path from 'node:path'
 import {getData} from './getData.js
 
+// add new parsed data to the JSON object
 export async function addNewSighting(newSighting) {
   try {
     const existingData = await getData()
