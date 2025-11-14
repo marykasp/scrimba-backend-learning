@@ -1,6 +1,6 @@
 import http from "node:http";
-import { handleFiles } from "./handleFiles";
-import { getTemp } from "./getTemp";
+import { handleFiles } from "./handleFiles.js";
+import { getTemp } from "./getTemp.js";
 
 const __dirname = import.meta.dirname;
 
