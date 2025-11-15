@@ -65,3 +65,96 @@ app.get(`/`, (req, res) => {
   res.json(data);
 });
 ```
+
+### Query Parameters
+
+`request object` -
+
+- `req.body` - data from the request body
+- `req.params`
+- `req.method` - http method
+- `req.ip` - client’s IP address
+- `req.query` - query params `/api/?boolean=true&location=newyork`
+  - returns an object with key/value pairs of the queries
+
+```jsx
+app.get(`/api/`, (req, res) => {
+  req.query; // {job: 'movie-star', isRich: `true`}
+  // use the object to filter the JSON data and then serve to the client
+});
+```
+
+### Filtering by Query Params
+
+Extract the query params and use that object in order to filter the data
+
+```jsx
+app.get(`/api`, (req, res) => {
+  const filteredData = startups;
+  const { industry, country, continent, is_mvp } = req.query;
+
+  // filter based on params - check if params exists before filtering
+  if (industry) {
+    filteredData = filteredData.filter(
+      (startup) => startup.industry.toLowerCase() === industry.toLowerCase(),
+    );
+  }
+
+  if (is_mvp) {
+    filteredData = filteredData.filter(
+      (startup) => startup.is_mvp === JSON.parse(is_mvp.toLowerCase()),
+    );
+  }
+});
+```
+
+### Path params
+
+Retrieve the path params from the `req.params`
+
+- `/api/crypto-name/:currency` - extracts the value about the `:` and puts it in an object
+- `{currency: 'eth'}`
+
+```jsx
+// add a new GET route for requests with path params
+// /api/<field>/<term>
+
+app.get(`/api/:field/:term`, (req, res) => {
+  // store filtered data
+  let filteredData = startups;
+
+  // get path params
+  const { field, term } = req.params;
+
+  if (field) {
+    filteredData = filteredData.filter(
+      (startup) => startup[field].toLowerCase() === term.toLowerCase(),
+    );
+  }
+});
+```
+
+Want only the endpoints of `country, continent, and industry` if user tries a different field serve a message object, change status code
+
+```jsx
+app.get(`/api/:field/:term`, (req, res) => {
+  // store filtered data
+  let filteredData = startups;
+
+  // get path params
+  const { field, term } = req.params;
+  const allowedFields = ["country", "continent", "industry"];
+
+  // if field is not in the specified fields above send a response message
+  // send a 400 bad request status code in response object
+  if (!allowedFields.includes(field)) {
+    return res.status(400).json({ message: "Not allowed to use this field" });
+  }
+
+  if (field) {
+    filteredData = filteredData.filter(
+      (startup) => startup[field].toLowerCase() === term.toLowerCase(),
+    );
+  }
+});
+```
