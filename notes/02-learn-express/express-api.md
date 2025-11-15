@@ -219,3 +219,18 @@ app.use((req, res) => {
   res.status(404).json({ message: "endpoint is not found" });
 });
 ```
+
+## CORS
+
+By default browsers enforce a `same-origin policy`. This means requests can only be made to the same **protocol**, **domain** and **port** as the one serving the web page.
+
+`CORS` - cross origin resource sharing - want endpoints to be open to everyone with different domain or port from frontend. Allow all access to anyone frontend code
+
+- send special CORS headers
+
+```jsx
+// install cors
+import cors from "cors";
+// at top of file - open CORS policy that allows all access applies to all routes below this
+app.use(cors());
+```
