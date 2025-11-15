@@ -158,3 +158,64 @@ app.get(`/api/:field/:term`, (req, res) => {
   }
 });
 ```
+
+## `express.Router()`
+
+- set up an express router for specific paths like `/api`
+- set up a controller - functional logic to run when request data from that path
+
+```jsx
+const apiRouter = express.Router()
+
+const productsController = (req, res) => {
+	res.json({data: 'products'})
+}
+
+const servicesController = (req, res) => {
+	res.json({data: 'services'})
+}
+
+// just like app.get, this router needs the path and the controller function
+apiRouter.get(`/products`, productsController)
+
+apiRouter.get(`/services`), servicesController)
+
+// use method - any request starting with that path then use that router
+app.use(`/api`, apiRouter)
+```
+
+- save controllers in separate controller files
+- save apiRoutes in routes folder
+- need to export controllers from their files to import into the routes folder
+
+```jsx
+//Controllers folder
+
+// productsController.js
+export const productsController = (req, res) => {
+  res.json({ data: "products" });
+};
+
+// servicesController.js
+export const servicesController = (req, res) => {
+  res.json({ data: "services" });
+};
+```
+
+```jsx
+import express from 'express'
+import {productsController} from "'../controller/productsController.js"
+
+// need to this apiRouter instance in the server.js file to pass to the app.use() method
+export const apiRouter = express.Router()
+
+apiRouter.get('/products', productsController}
+```
+
+Serve a 404 if no route
+
+```js
+app.use((req, res) => {
+  res.status(404).json({ message: "endpoint is not found" });
+});
+```
