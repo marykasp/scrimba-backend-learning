@@ -9,6 +9,8 @@ I’m using it to track progress, practice Node.js, Express, databases, and buil
 
 ## | 1 | [Learn Node.js](https://scrimba.com/learn/nodejs)
 
+## | 2 | [Learn Node.js](https://scrimba.com/learn/express)
+
 ## 🧩 Topics Covered
 
 - Node.js fundamentals (modules, npm, file system)
