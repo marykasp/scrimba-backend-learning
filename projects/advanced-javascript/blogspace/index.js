@@ -25,3 +25,17 @@ fetch(`https://jsonplaceholder.typicode.com/posts`, { method: "GET" }).then(
       console.log(postsArr);
     }),
 );
+
+document.getElementById("new-post").addEventListener("submit", (event) => {
+  event.preventDefault();
+
+  const postTitle = document.getElementById("post-title").value;
+  const postBody = document.getElementById("post-body").value;
+
+  const data = {
+    title: postTitle,
+    body: postBody,
+  };
+
+  console.log(data);
+});
