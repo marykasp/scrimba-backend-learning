@@ -426,3 +426,34 @@ createTable();
 ```
 
 Run `node createTable.js` to set up the table and then the utility function `logTable.js` to get all the data from the database and show in a tabular view in the console
+
+### SQLITE Methods
+
+`db.exec` - run multiple statements at once
+
+- setting up a db table - schema setup
+- not asking for data to be returned
+
+`db.run()` - run a single statement, inserting, updating, or deleting - no data returned
+
+```sql
+db.run(`INSERT INTO users(name, email) VALUES(?,?)`,
+ [name, email]
+)
+```
+
+`exec()` executes multiple statements!!
+
+`db.get()`
+
+- used when expect one row or want first row
+- lookup one row by id
+
+```sql
+db.get(`SELECT * FROM users WHERE id = ?`, [id])
+```
+
+`db.all()` - want all matching rows from table as an aray
+
+- select all products
+- returns an array
