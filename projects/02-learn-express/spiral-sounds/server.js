@@ -1,9 +1,12 @@
 import express from "express";
+import { productsRouter } from "./routes/products";
 
 const app = express();
 const PORT = 8000;
 
 app.use(express.static("public"));
+
+app.use("/api/products", productsRouter);
 
 app
   .listen(8000, () => console.log(`Server running on port: ${PORT}`))
