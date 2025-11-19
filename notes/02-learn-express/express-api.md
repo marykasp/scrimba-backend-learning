@@ -234,3 +234,81 @@ import cors from "cors";
 // at top of file - open CORS policy that allows all access applies to all routes below this
 app.use(cors());
 ```
+
+## Fullstack REST API
+
+Learn how to connect frontend with a backend using Express. Serve static files, set up routes, build a database, and add real functionality like dropdowns and search
+
+**Project** - spiral sounds - a record shop to display records with filtering by genre
+
+- serve all assets - frontend files and backend data to display
+- display all products from a database
+- display a selection of products based on user requirements
+
+**Learning:**
+
+- middleware
+- serving static files
+- creating a database
+- seeding a database
+- retrieving from a database
+- SQL queries and binding
+
+**Database** → SQLite
+
+- zero setup - no thirdparty server needed
+- lightweight and fast
+- works cross-platform
+
+## Middleware
+
+Comes in the middle of request/response cycle before response is sent - modify response object or end response early
+
+- enabling CORS
+- logging request/errors
+- parsing request
+
+1. Custom - built by developer
+2. Built-In - provided by Express
+3. 3rd party - available as NPM dependency
+
+```jsx
+import express from "express";
+
+const app = express();
+
+// middleware
+app.use((req, res, next) => {
+  // add custom headers
+  console.log("custom headers added");
+
+  //next function is called when middleware is created
+  next();
+});
+
+app.use((req, res, next) => {
+  console.log(`${req.url} ${req.method}`);
+  next();
+});
+
+app.get("/", (req, res) => {
+  res.send("<doctype html><html><body>Hello there!</body></html>");
+});
+
+app.listen(8000, () => console.log("listening on 800"));
+```
+
+Serve static files in the `public` directory folder - all of the below are built in express middleware functions `app.use`
+
+```jsx
+app.use(express.static("public")); // serves all static files
+
+app.use("/api", apiRouter); // router that will get data if the route matches
+
+// catch all build in middleware if bad request
+app.use((req, res) => {
+  res.status(404).json({ message: "error" });
+});
+```
+
+Set up **routes and controllers** to fetch data from DB for products and genres of music
