@@ -312,3 +312,117 @@ app.use((req, res) => {
 ```
 
 Set up **routes and controllers** to fetch data from DB for products and genres of music
+
+## Setting up Database
+
+SQLite Database -
+
+`npm install sqlite3`
+
+`npm install sqlite`
+
+**SQLite3 - database driver**
+
+- opens a connection to the database file
+- executes SQL queries
+- handles reading and writing results
+
+**SQLite - a wrapper**
+
+- provides async/await support for cleaner code
+
+```jsx
+// createTable.js
+import sqlite3 from 'sqlite3'
+import {open} from 'sqlite'
+import path from 'node:path'
+
+// database will be a file that can see in file tree
+async function createTable() {
+	const db = await open({
+		filename: path.join('database.db')
+		driver: sqlite3.Database
+	})
+
+	// create a new table abductions - primary ID, location, and details properties
+	await db.exec(`
+		CREATE TABLE IF NOT EXISTS abductions (
+			id INTEGER PRIMARY NEW AUTOINCREMENT
+			location TEXT NOT NULL
+			details TEXT NOT NULL
+		)
+	`)
+
+	// close the database at the end
+	await db.close()
+	console.log('Table abductions created')
+}
+
+createTable()
+```
+
+Can run this tile to create the `db` by calling `node createTable.js`
+
+- creates a new `database.db` file in the root directory
+
+Utility function to view the data in the db table
+
+```jsx
+// logTable.js
+
+export async function viewAllProducts() {
+	const db = await open({
+		filename: path.join('database.db')
+		driver; sqlite3.Database
+	})
+
+	try {
+	// select everything from the table
+		const abductions = await db.all('SELECT * FROM abductions')
+		// tabulates data in the console
+		console.table(abductions)
+	} catch(err) {
+		console.error('Error fetching products:', err.message)
+	} finally {
+		await db.close()
+	}
+}
+
+viewAllProducts()
+```
+
+### Exercise: Set up Products Database
+
+```jsx
+import sqlite3 from "sqlite3";
+import { open } from "sqlite";
+import path from "node:path";
+
+async function createTable() {
+  //create db connection using driver
+  const db = await open({
+    filename: path.join("database.db"),
+    driver: sqlite3.Database,
+  });
+
+  await db.exec(`
+		CREATE TABLE IF NOT EXISTS products(
+			id INTEGEGER PRIMARY KEY,
+			artist TEXT NOT NULL,
+			title TEXT NOT NULL,
+			price REAL NOT NULL,
+			image TEXT NOT NULL,
+			year INTEGER,
+			genre TEXT,
+			stock INTEGER
+		)
+	`);
+
+  db.close();
+  console.log("Table products created");
+}
+
+createTable();
+```
+
+Run `node createTable.js` to set up the table and then the utility function `logTable.js` to get all the data from the database and show in a tabular view in the console
