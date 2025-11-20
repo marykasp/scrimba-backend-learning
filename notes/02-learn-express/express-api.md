@@ -457,3 +457,61 @@ db.get(`SELECT * FROM users WHERE id = ?`, [id])
 
 - select all products
 - returns an array
+
+## Adding Data to the Database
+
+Seeding a table comes after creating the table/schema with `db.exec` - lays out the properties and types of data of the table. To view if connection and creation of table works can use utility function of `viewAll` that calls `db.all()` to view all rows from the table (view all data).
+
+Use a utility function called `seedTable.js` to make connection to database and seed the table
+
+```jsx
+// seedTable.js - normally create and seed db in one file
+import sqlite3 from 'sqlite3'
+import {open} from 'sqlite'
+import path from 'node:path'
+import {abductionsData} from './abductionsData.js'
+
+async function seedTable() {
+
+	const db = await open({
+		filename: path.join('database.db')
+		driver: sqlite3.Database
+	})
+
+	// writing data to db
+	try {
+		abductionsData.forEach(data => {
+			const {location, details} = data
+			await db.run(
+		})
+		await db.exec('BEGIN TRANSACTION')
+		// prepared statements, syntax for placeholders values ?
+		for(const {location, details} of abductionsData) {
+			await db.run(
+			`INSERT INTO abductions (location,details)
+			VALUES (?, ?)`,
+			[location,details]
+			)
+		}
+
+		await db.exec(COMMIT')
+		console.log('All records inserted')
+	} catch(err) {
+		// roll back to make sure nothing is inserted if there is an error
+		await db.exec('ROLLBACK')
+		console.log('Error inserting data', err.message)
+	} finally {
+		await db.close()
+	}
+}
+
+seedTable()
+```
+
+Insert own transaction - opens database file, inserts data (writes the row), closes db file
+
+- will do for each object in the data
+
+`db.run()` - runs sql, changes db but does not return any data
+
+- values are safely inserted where the placeholders of values are
