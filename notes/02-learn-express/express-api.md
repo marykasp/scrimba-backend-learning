@@ -515,3 +515,22 @@ Insert own transaction - opens database file, inserts data (writes the row), clo
 `db.run()` - runs sql, changes db but does not return any data
 
 - values are safely inserted where the placeholders of values are
+
+// edit logTables to modify what is displayed in the console
+
+```javascript
+async function viewAllProducts() {
+	// connection to db
+	const db = await open({
+		filename: path.join('database.db'),
+		driver: sqlite3.DATABASE
+	})
+
+	try {
+		const abductions = await db.all('SELECT * FROM abductions')
+		// change the object inside the array
+		const itemsToDisplay = abductions.map(({location, details}) => {location, details: details.substring(0,50)})
+		console.table(itemsToDisplay)
+	}
+}
+```
