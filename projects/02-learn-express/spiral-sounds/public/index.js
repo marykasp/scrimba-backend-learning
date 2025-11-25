@@ -41,8 +41,10 @@ function renderProducts(products) {
 async function populateGenreSelect() {
   const res = await fetch("/api/products/genres");
   const genres = await res.json();
+  console.log(genres);
   const select = document.getElementById("genre-select");
 
+  // each genre is a string
   genres.forEach((genre) => {
     const option = document.createElement("option");
     option.value = genre;
@@ -54,6 +56,7 @@ async function populateGenreSelect() {
 // INITIAL LOAD
 
 async function init() {
+  populateGenreSelect();
   // fetch all products based on query params
   const products = await getProducts();
   // render the returned products as product cards
