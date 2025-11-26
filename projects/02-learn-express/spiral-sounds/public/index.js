@@ -6,15 +6,16 @@ toggle.addEventListener("click", () => {
   menu.classList.toggle("open");
 });
 
-// ======== PRODUCT FETCHING =======
-async function getProducts(filter = {}) {
-  const queryParams = new URLSearchParams(filter);
+// ===== Product Fetching =====
 
+async function getProducts(filters = {}) {
+  const queryParams = new URLSearchParams(filters);
   const res = await fetch(`/api/products?${queryParams}`);
   return await res.json();
 }
 
-// ========= PRODUCT RENDERING ========
+// ===== Product Rendering =====
+
 function renderProducts(products) {
   const albumsContainer = document.getElementById("products-container");
   const cards = products
@@ -24,7 +25,7 @@ function renderProducts(products) {
         <img src="./images/${album.image}" alt="${album.title}">
         <h2>${album.title}</h2>
         <h3>${album.artist}</h3>
-        <p>${album.price}</p>
+        <p>$${album.price}</p>
         <button class="add-btn">Add to Cart</button>
         <p class="genre-label">${album.genre}</p>
       </div>
@@ -53,15 +54,18 @@ async function populateGenreSelect() {
   });
 }
 
-// INITIAL LOAD
+// ===== Initial Load =====
 
+/**
+ * Fetches and displays all products on initial page load.
+ */
 async function init() {
+  // generate dropdown menu of genres - first fetch genres from endpoint
   populateGenreSelect();
-  // fetch all products based on query params
+  // fetch all products
   const products = await getProducts();
-  // render the returned products as product cards
+  // render the products as cards
   renderProducts(products);
-  // populate the genres in the select menu
 }
 
 init();
