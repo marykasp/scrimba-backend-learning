@@ -559,3 +559,29 @@ async function getData() {
 ```
 
 Build SQL queries using bind values
+
+In `productControllers` file add in functionality to retrieve data with `db` sql queries
+
+### Get Genres
+
+Return an array of genre names as strings - send to client with `res.json()`
+
+```jsx
+export async function getGenres(req, res) {
+  try {
+    const db = await getDBConnection();
+
+    const query = `SELECT DISTINCT genre from products`;
+    const genres = await db.all(query);
+    // {genre: 'pop'}
+
+    // create an array of genre strings
+    const genreStrings = genres.map((genre) => genre.genre);
+    req.json(genreStrings);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: `Failed to fetch genres`, details: err.message });
+  }
+}
+```
