@@ -534,3 +534,28 @@ async function viewAllProducts() {
 	}
 }
 ```
+
+## Getting Data
+
+```javascript
+async function getData() {
+  const db = await open({
+    filename: path.join("database.db"),
+    driver: sqlite3.Database,
+  });
+
+  try {
+    const query = `SELECT * FROM abductions WHERE location = ?`;
+    // get user inputted value from the params to then use to get the data
+    const params = ["Roswell"];
+
+    const abductions = await db.all(query, params);
+    // returns array of objects of data
+    console.log(abductions);
+  } catch (err) {
+    console.log(err);
+  }
+}
+```
+
+Build SQL queries using bind values
