@@ -585,3 +585,25 @@ export async function getGenres(req, res) {
   }
 }
 ```
+
+### Get Products
+
+- sever all products
+- server the products in a provided genre
+- server products whose title, artist, or genre contain a provided search query
+
+```javascript
+export async function getProducts(req, res) {
+  try {
+    const db = await getDBConnection();
+
+    let query = `SELECT * FROM products`;
+    const products = await db.all(query);
+    res.json(products);
+  } catch (err) {
+    res
+      .status(500)
+      .json({ error: `Failed to fetch products`, details: err.message });
+  }
+}
+```
