@@ -7,7 +7,6 @@ toggle.addEventListener("click", () => {
 });
 
 // ===== Product Fetching =====
-
 async function getProducts(filters = {}) {
   const queryParams = new URLSearchParams(filters);
   const res = await fetch(`/api/products?${queryParams}`);
@@ -69,3 +68,44 @@ async function init() {
 }
 
 init();
+
+// ===== Filter Handling =====
+
+/**
+ * Fetches and renders products based on the current search input.
+ */
+async function applySearchFilter() {
+  const search = document.getElementById("search-input").value.trim();
+  const filters = {};
+  if (search) filters.search = search;
+
+  const products = await getProducts(filters);
+  renderProducts(products);
+}
+
+// ===== Event Listeners =====
+
+document.getElementById("search-input").addEventListener("input", (e) => {
+  e.preventDefault();
+  applySearchFilter();
+});
+
+// prevent 'enter' from submitting
+document.getElementById("search-input").addEventListener("submit", (e) => {
+  e.preventDefault();
+});
+
+document.querySelector("form").addEventListener("submit", (e) => {
+  e.preventDefault();
+  applySearchFilter(); // your function to run the search
+});
+
+document
+  .getElementById("genre-select")
+  .addEventListener("change", async (e) => {
+    const genre = e.target.value;
+    console.log(genre);
+    const products = await getProducts(genre ? { genre } : {});
+    // console.log(`Front end`, products);
+    renderProducts(products);
+  });

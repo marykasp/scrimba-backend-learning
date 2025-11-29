@@ -23,21 +23,21 @@ export async function getProducts(req, res) {
   try {
     const db = await getDBConnection();
 
-    let query = `SELECT * FROM products`;
+    let query = "SELECT * FROM products";
     let params = [];
 
-    const { genre } = req.params;
+    const { genre } = req.query;
+
     if (genre) {
-      query += `WHERE genre = ?`;
+      query += " WHERE genre = ?";
       params.push(genre);
     }
-
     const products = await db.all(query, params);
-    console.log(products);
+
     res.json(products);
   } catch (err) {
     res
       .status(500)
-      .json({ error: `Failed to fetch products`, details: err.message });
+      .json({ error: "Failed to fetch products", details: err.message });
   }
 }
